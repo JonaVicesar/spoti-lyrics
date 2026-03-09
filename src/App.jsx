@@ -28,10 +28,10 @@ export default function App() {
 
   const [bgColor, setBgColor] = useState("#5a8a4a");
   const [textColor, setTextColor] = useState("#0d0d0d");
-  const [fontSize, setFontSize] = useState(46);
+  const [fontSize, setFontSize] = useState(32);
   const [fontFamily, setFontFamily] = useState("Nunito");
-  const [cardWidth, setCardWidth] = useState(500);
-  const [padding, setPadding] = useState(44);
+  const [cardWidth, setCardWidth] = useState(340);
+  const [padding, setPadding] = useState(16);
   const [fontReady, setFontReady] = useState(false);
 
   useEffect(() => {
@@ -135,19 +135,8 @@ export default function App() {
 
             {/* header */}
             <div className="editor-header">
-              <button className="btn-back" onClick={handleBack}>← Volver</button>
-              {track && (
-                <div className="editor-track-info">
-                  {track.artworkUrl100 && (
-                    <img src={track.artworkUrl100} className="editor-cover" alt={track.trackName} />
-                  )}
-                  <div className="editor-track-text">
-                    <div className="editor-track-name">{track.trackName}</div>
-                    <div className="editor-track-artist">{track.artistName}</div>
-                  </div>
-                </div>
-              )}
-              <button className="btn btn-white btn-download" onClick={download}>↓ PNG</button>
+              <button className="btn-back" onClick={handleBack}>Volver</button>
+              <button className="btn btn-white btn-download" onClick={download}> DESCARGAR</button>
             </div>
 
             {/* body, actualizado para moviles*/}
@@ -162,13 +151,12 @@ export default function App() {
               </div>
 
               <div className="editor-preview">
-                <div className="panel-title">Preview</div>
+                
                 <PreviewPanel canvasRef={canvasRef} />
               </div>
 
               {/* panel de disenho para ordenadores */}
               <div className="editor-design desktop-only">
-                <div className="panel-title">Diseño</div>
                 <DesignPanel {...designProps} />
               </div>
             </div>

@@ -97,7 +97,7 @@ const CSS = `
   .editor-track-text { min-width: 0; }
   .editor-track-name { font-size: 12px; font-weight: 500; color: #ddd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .editor-track-artist { font-size: 10px; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .btn-download { padding: 8px 14px; font-size: 9px; flex-shrink: 0; }
+  .btn-download { padding: 8px 14px; font-size: 9px; flex-shrink: 0; margin-left: auto; }
 
   /* Desktop: 3 columnas */
   .editor-body {
