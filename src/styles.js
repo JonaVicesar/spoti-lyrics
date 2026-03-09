@@ -208,10 +208,10 @@ const CSS = `
 
   /* ── FOOTER ── */
   .footer {
-    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px;
-    padding: 12px 20px; border-top: 1px solid var(--border);
-    font-size: 10px; color: var(--muted); background: var(--surface);
-  }
+  display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;
+  padding: 12px 20px; border-top: 1px solid var(--border);
+  font-size: 10px; color: var(--muted); background: var(--surface);
+}
   .footer a { color: var(--accent); text-decoration: none; }
   .footer a:hover { text-decoration: underline; }
 
