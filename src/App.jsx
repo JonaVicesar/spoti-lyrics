@@ -16,8 +16,8 @@ export default function App() {
     search,
   } = useSearch();
 
-  // vista actual, por defecto la vista de busqueda
   const [view, setView] = useState("search");
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const [track, setTrack] = useState(null);
   const [coverImg, setCoverImg] = useState(null);
@@ -44,6 +44,12 @@ export default function App() {
     });
   }, []);
 
+  //bloquear scroll cuandooel drawer esta abierto
+  useEffect(() => {
+    document.body.style.overflow = drawerOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [drawerOpen]);
+
   const handlePickTrack = (result) => {
     setShowResults(false);
     setSelected(new Set());
@@ -53,6 +59,7 @@ export default function App() {
 
   const handleBack = () => {
     setView("search");
+    setDrawerOpen(false);
     setTrack(null);
     setLyrics([]);
     setSelected(new Set());
@@ -64,6 +71,13 @@ export default function App() {
     bgColor, textColor, fontSize, fontFamily, cardWidth, padding, fontReady,
   });
 
+  const designProps = {
+    bgColor, setBgColor, textColor, setTextColor,
+    fontSize, setFontSize, fontFamily, setFontFamily,
+    cardWidth, setCardWidth, padding, setPadding,
+    onDownload: download,
+  };
+
   return (
     <>
       <style>{CSS}</style>
@@ -73,7 +87,8 @@ export default function App() {
         {view === "search" && (
           <div className="search-view">
             <div className="search-hero">
-              <div className="brand-name">spoti-lyrics</div>
+              <div className="brand-name">LYRIC CARD</div>
+              <div className="brand-sub">● ITUNES + LRCLIB</div>
 
               <div className="search-box-wrap">
                 <div className="search-row">
@@ -85,10 +100,7 @@ export default function App() {
                     onKeyDown={(e) => e.key === "Enter" && search()}
                     autoFocus
                   />
-                  <button
-                    className="btn btn-green search-btn"
-                    onClick={search}
-                  >
+                  <button className="btn btn-green search-btn" onClick={search}>
                     {isSearching ? "..." : "→"}
                   </button>
                 </div>
@@ -123,45 +135,68 @@ export default function App() {
 
             {/* header */}
             <div className="editor-header">
-              <button className="btn-back" onClick={handleBack}>Volver</button>
-  
+              <button className="btn-back" onClick={handleBack}>← Volver</button>
+              {track && (
+                <div className="editor-track-info">
+                  {track.artworkUrl100 && (
+                    <img src={track.artworkUrl100} className="editor-cover" alt={track.trackName} />
+                  )}
+                  <div className="editor-track-text">
+                    <div className="editor-track-name">{track.trackName}</div>
+                    <div className="editor-track-artist">{track.artistName}</div>
+                  </div>
+                </div>
+              )}
+              <button className="btn btn-white btn-download" onClick={download}>↓ PNG</button>
             </div>
 
-            {/* MAIN */}
+            {/* body, actualizado para moviles*/}
             <div className="editor-body">
+              <div className="editor-lyrics">
+                <LyricsPanel
+                  lyrics={lyrics} setLyrics={setLyrics}
+                  selected={selected} setSelected={setSelected}
+                  lyricsLoading={lyricsLoading}
+                  lyricsError={lyricsError} setLyricsError={setLyricsError}
+                />
+              </div>
 
               <div className="editor-preview">
                 <div className="panel-title">Preview</div>
                 <PreviewPanel canvasRef={canvasRef} />
               </div>
 
-              {/* letras */}
-              <div className="editor-lyrics">
-                <LyricsPanel
-                  lyrics={lyrics}
-                  setLyrics={setLyrics}
-                  selected={selected}
-                  setSelected={setSelected}
-                  lyricsLoading={lyricsLoading}
-                  lyricsError={lyricsError}
-                  setLyricsError={setLyricsError}
-                />
-              </div>
-
-              {/* disenho */}
-              <div className="editor-design">
+              {/* panel de disenho para ordenadores */}
+              <div className="editor-design desktop-only">
                 <div className="panel-title">Diseño</div>
-                <DesignPanel
-                  bgColor={bgColor} setBgColor={setBgColor}
-                  textColor={textColor} setTextColor={setTextColor}
-                  fontSize={fontSize} setFontSize={setFontSize}
-                  fontFamily={fontFamily} setFontFamily={setFontFamily}
-                  cardWidth={cardWidth} setCardWidth={setCardWidth}
-                  padding={padding} setPadding={setPadding}
-                  onDownload={download}
-                />
+                <DesignPanel {...designProps} />
               </div>
+            </div>
 
+            {/* botnn flotante de edit para moviles pequenhos */}
+            <button
+              className="fab"
+              onClick={() => setDrawerOpen(true)}
+              aria-label="Editar diseño"
+            >
+              ✏️
+            </button>
+
+            {/* overlay oscuro */}
+            {drawerOpen && (
+              <div className="drawer-overlay" onClick={() => setDrawerOpen(false)} />
+            )}
+
+            {/*drawer para moveiles pequenhos*/}
+            <div className={`drawer ${drawerOpen ? "drawer--open" : ""}`}>
+              <div className="drawer-handle" onClick={() => setDrawerOpen(false)} />
+              <div className="drawer-header">
+                <span className="drawer-title">Diseño</span>
+                <button className="drawer-close" onClick={() => setDrawerOpen(false)}>✕</button>
+              </div>
+              <div className="drawer-body">
+                <DesignPanel {...designProps} />
+              </div>
             </div>
 
             <Footer />
@@ -171,4 +206,4 @@ export default function App() {
       </div>
     </>
   );
-}
+} 
