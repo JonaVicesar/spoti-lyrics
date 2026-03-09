@@ -87,7 +87,7 @@ export default function App() {
         {view === "search" && (
           <div className="search-view">
             <div className="search-hero">
-              <div className="brand-name">LYRIC CARD</div>
+              <div className="brand-name">spoti-lyrics</div>
               <div className="brand-sub">● ITUNES + LRCLIB</div>
 
               <div className="search-box-wrap">
