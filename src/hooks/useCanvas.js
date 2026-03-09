@@ -27,7 +27,7 @@ export function useCanvas({ track, coverImg, lyrics, selected, bgColor, textColo
     const headerTextX = pad + coverSize + Math.round(fontSize * 0.5);
     const headerH = coverSize;
 
-    // Construir líneas wrapeadas
+    // construir lineas
     const allLines = [];
     if (lyricsText) {
       for (const raw of lyricsText.split("\n")) {
@@ -43,7 +43,7 @@ export function useCanvas({ track, coverImg, lyrics, selected, bgColor, textColo
     canvas.width = cardWidth;
     canvas.height = Math.max(totalH, 300);
 
-    // Fondo redondeado
+    // fondo
     const r = Math.round(cardWidth * 0.04);
     ctx.fillStyle = bgColor;
     ctx.beginPath();
@@ -61,7 +61,7 @@ export function useCanvas({ track, coverImg, lyrics, selected, bgColor, textColo
 
     const topY = Math.round(pad * 1.1);
 
-    // Portada o placeholder
+    // portada
     if (coverImg) {
       drawRoundedImage(ctx, coverImg, pad, topY, coverSize, coverSize, Math.round(coverSize * 0.08));
     } else {
@@ -81,7 +81,7 @@ export function useCanvas({ track, coverImg, lyrics, selected, bgColor, textColo
       ctx.fill();
     }
 
-    // Título y artista centrados verticalmente con la portada
+    // titulo de la cancion y nombre del artista
     const textBlockH = titleSize + 8 + artistSize;
     const textStartY = topY + (headerH - textBlockH) / 2;
     const maxTextW = cardWidth - headerTextX - pad;
@@ -100,7 +100,7 @@ export function useCanvas({ track, coverImg, lyrics, selected, bgColor, textColo
       artistText = artistText.slice(0, -4) + "…";
     ctx.fillText(artistText, headerTextX, textStartY + titleSize + 8 + artistSize);
 
-    // Letras
+    // letras
     if (lyricsText) {
       ctx.fillStyle = textColor;
       ctx.font = lyricFont;
