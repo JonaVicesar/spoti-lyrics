@@ -14,6 +14,7 @@ export function useCanvas({ track, coverImg, lyrics, selected, bgColor, textColo
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
 
+    const dpr = 6; //relacion de pixeles de la pantalla(pixeles fisicos) y los pixeles del css(pixeles logicos)
     const pad = padding;
     const maxW = cardWidth - pad * 2;
     const lyricsText = getSelectedText();
@@ -39,9 +40,16 @@ export function useCanvas({ track, coverImg, lyrics, selected, bgColor, textColo
     const lyricsH = allLines.reduce((acc, l) => acc + (l === null ? lh * 0.35 : lh), 0);
     const gapHeaderLyrics = fontSize * 1.6;
     const totalH = pad * 1.3 + headerH + gapHeaderLyrics + lyricsH + pad * 1.3;
+    const canvasH = Math.max(totalH, 300);
 
-    canvas.width = cardWidth;
-    canvas.height = Math.max(totalH, 300);
+    canvas.width = cardWidth*dpr; //al fijar el tamanho del canvas se multiplica por el dpr
+    canvas.height = canvasH*dpr;
+
+    //el tamanho visual se mantiene igual con css (se dibujan mas pixeles pero se ven del mismo tamanho)
+    canvas.style.width = `${cardWidth}px`;
+    canvas.style.height = `${Math.max(totalH, 300)}px`
+
+    ctx.scale(dpr, dpr); //se escala el contexto para que se dibuje en alta resolucion
 
     // fondo
     const r = Math.round(cardWidth * 0.04);
