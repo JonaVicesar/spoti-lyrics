@@ -6,13 +6,19 @@ import LyricsPanel from "./components/LyricsPanel";
 import PreviewPanel from "./components/PreviewPanel";
 import Footer from "./components/Footer";
 import CSS from "./styles";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 export default function App() {
   const {
-    query, setQuery,
-    results, setResults,
-    isSearching, searchError,
-    showResults, setShowResults,
+    query,
+    setQuery,
+    results,
+    setResults,
+    isSearching,
+    searchError,
+    showResults,
+    setShowResults,
     search,
   } = useSearch();
 
@@ -36,7 +42,8 @@ export default function App() {
 
   useEffect(() => {
     const link = document.createElement("link");
-    link.href = "https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap";
+    link.href =
+      "https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap";
     link.rel = "stylesheet";
     document.head.appendChild(link);
     document.fonts.ready.then(() => {
@@ -47,14 +54,22 @@ export default function App() {
   //bloquear scroll cuandooel drawer esta abierto
   useEffect(() => {
     document.body.style.overflow = drawerOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [drawerOpen]);
 
   const handlePickTrack = (result) => {
     setShowResults(false);
     setSelected(new Set());
     setView("editor");
-    fetchTrackData(result, { setTrack, setCoverImg, setLyrics, setLyricsLoading, setLyricsError });
+    fetchTrackData(result, {
+      setTrack,
+      setCoverImg,
+      setLyrics,
+      setLyricsLoading,
+      setLyricsError,
+    });
   };
 
   const handleBack = () => {
@@ -67,14 +82,32 @@ export default function App() {
   };
 
   const { canvasRef, download } = useCanvas({
-    track, coverImg, lyrics, selected,
-    bgColor, textColor, fontSize, fontFamily, cardWidth, padding, fontReady,
+    track,
+    coverImg,
+    lyrics,
+    selected,
+    bgColor,
+    textColor,
+    fontSize,
+    fontFamily,
+    cardWidth,
+    padding,
+    fontReady,
   });
 
   const designProps = {
-    bgColor, setBgColor, textColor, setTextColor,
-    fontSize, setFontSize, fontFamily, setFontFamily,
-    cardWidth, setCardWidth, padding, setPadding,
+    bgColor,
+    setBgColor,
+    textColor,
+    setTextColor,
+    fontSize,
+    setFontSize,
+    fontFamily,
+    setFontFamily,
+    cardWidth,
+    setCardWidth,
+    padding,
+    setPadding,
     onDownload: download,
   };
 
@@ -82,7 +115,6 @@ export default function App() {
     <>
       <style>{CSS}</style>
       <div className="app">
-
         {/* SEARCH VIEW */}
         {view === "search" && (
           <div className="search-view">
@@ -96,7 +128,10 @@ export default function App() {
                     className="inp"
                     placeholder="Buscá una canción o artista..."
                     value={query}
-                    onChange={(e) => { setQuery(e.target.value); setShowResults(false); }}
+                    onChange={(e) => {
+                      setQuery(e.target.value);
+                      setShowResults(false);
+                    }}
                     onKeyDown={(e) => e.key === "Enter" && search()}
                     autoFocus
                   />
@@ -110,14 +145,27 @@ export default function App() {
                 {showResults && results.length > 0 && (
                   <div className="results-list">
                     {results.map((result, i) => (
-                      <div key={i} className="result-item" onClick={() => handlePickTrack(result)}>
-                        {result.artworkUrl100
-                          ? <img src={result.artworkUrl100} className="result-cover" alt={result.trackName} />
-                          : <div className="result-cover result-cover--empty">🎵</div>
-                        }
+                      <div
+                        key={i}
+                        className="result-item"
+                        onClick={() => handlePickTrack(result)}
+                      >
+                        {result.artworkUrl100 ? (
+                          <img
+                            src={result.artworkUrl100}
+                            className="result-cover"
+                            alt={result.trackName}
+                          />
+                        ) : (
+                          <div className="result-cover result-cover--empty">
+                            🎵
+                          </div>
+                        )}
                         <div>
                           <div className="result-name">{result.trackName}</div>
-                          <div className="result-artist">{result.artistName}</div>
+                          <div className="result-artist">
+                            {result.artistName}
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -132,26 +180,45 @@ export default function App() {
         {/* EDITOR VIEW */}
         {view === "editor" && (
           <div className="editor-view">
-
             {/* header */}
             <div className="editor-header">
-              <button className="btn-back" onClick={handleBack}>Volver</button>
-              <button className="btn btn-white btn-download" onClick={download}> DESCARGAR</button>
+              <button className="btn-back" onClick={handleBack}>
+                Volver
+              </button>
+
+                {" "}
+                <a
+                  href="https://github.com/JonaVicesar/spoti-lyrics"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-dark "
+       
+                >
+                  {" "}
+                  <FontAwesomeIcon icon={faGithub} />{" "}
+                </a>
+      
+              <button className="btn btn-white btn-download" onClick={download}>
+                {" "}
+                DESCARGAR
+              </button>
             </div>
 
             {/* body, actualizado para moviles*/}
             <div className="editor-body">
               <div className="editor-lyrics">
                 <LyricsPanel
-                  lyrics={lyrics} setLyrics={setLyrics}
-                  selected={selected} setSelected={setSelected}
+                  lyrics={lyrics}
+                  setLyrics={setLyrics}
+                  selected={selected}
+                  setSelected={setSelected}
                   lyricsLoading={lyricsLoading}
-                  lyricsError={lyricsError} setLyricsError={setLyricsError}
+                  lyricsError={lyricsError}
+                  setLyricsError={setLyricsError}
                 />
               </div>
 
               <div className="editor-preview">
-                
                 <PreviewPanel canvasRef={canvasRef} />
               </div>
 
@@ -172,15 +239,26 @@ export default function App() {
 
             {/* overlay oscuro */}
             {drawerOpen && (
-              <div className="drawer-overlay" onClick={() => setDrawerOpen(false)} />
+              <div
+                className="drawer-overlay"
+                onClick={() => setDrawerOpen(false)}
+              />
             )}
 
             {/*drawer para moveiles pequenhos*/}
             <div className={`drawer ${drawerOpen ? "drawer--open" : ""}`}>
-              <div className="drawer-handle" onClick={() => setDrawerOpen(false)} />
+              <div
+                className="drawer-handle"
+                onClick={() => setDrawerOpen(false)}
+              />
               <div className="drawer-header">
                 <span className="drawer-title">Diseño</span>
-                <button className="drawer-close" onClick={() => setDrawerOpen(false)}>✕</button>
+                <button
+                  className="drawer-close"
+                  onClick={() => setDrawerOpen(false)}
+                >
+                  ✕
+                </button>
               </div>
               <div className="drawer-body">
                 <DesignPanel {...designProps} />
@@ -190,8 +268,7 @@ export default function App() {
             <Footer />
           </div>
         )}
-
       </div>
     </>
   );
-} 
+}
